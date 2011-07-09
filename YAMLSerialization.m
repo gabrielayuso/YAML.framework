@@ -148,6 +148,9 @@ static id YAMLSerializationWithDocument(yaml_document_t *document, YAMLReadOptio
     }
   }
   
+#pragma unused (arrayClass)
+	#pragma unused (dictionaryClass)
+	
   if (opt & kYAMLReadOptionStringScalars) {
     // Supported
   } else {
@@ -169,38 +172,42 @@ static id YAMLSerializationWithDocument(yaml_document_t *document, YAMLReadOptio
   
   // Create all objects, don't fill containers yet...
   for (node = document->nodes.start, i = 0; node < document->nodes.top; node++, i++) {
-    switch (node->type) {
-      case YAML_SCALAR_NODE:
-        objects[i] = [[stringClass alloc] initWithUTF8String: (const char *)node->data.scalar.value];
-        if (!root) root = objects[i];
-        break;
-        
-      case YAML_SEQUENCE_NODE:
-        objects[i] = [[NSMutableArray alloc] initWithCapacity: node->data.sequence.items.top - node->data.sequence.items.start];
-        if (!root) root = objects[i];
-        break;
-        
-      case YAML_MAPPING_NODE:
-        objects[i] = [[NSMutableDictionary alloc] initWithCapacity: node->data.mapping.pairs.top - node->data.mapping.pairs.start];
-        if (!root) root = objects[i];
-        break;
-    }
+	  switch (node->type) {
+		  case YAML_SCALAR_NODE:
+			  objects[i] = [[stringClass alloc] initWithUTF8String: (const char *)node->data.scalar.value];
+			  if (!root) root = objects[i];
+			  break;
+			  
+		  case YAML_SEQUENCE_NODE:
+			  objects[i] = [[NSMutableArray alloc] initWithCapacity: node->data.sequence.items.top - node->data.sequence.items.start];
+			  if (!root) root = objects[i];
+			  break;
+			  
+		  case YAML_MAPPING_NODE:
+			  objects[i] = [[NSMutableDictionary alloc] initWithCapacity: node->data.mapping.pairs.top - node->data.mapping.pairs.start];
+			  if (!root) root = objects[i];
+			  break;
+		  default:
+			  break;
+	  }
   }
   
   // Fill in containers
   for (node = document->nodes.start, i = 0; node < document->nodes.top; node++, i++) {
-    switch (node->type) {
-      case YAML_SEQUENCE_NODE:
-        for (item = node->data.sequence.items.start; item < node->data.sequence.items.top; item++)
-          [objects[i] addObject: objects[*item - 1]];
-        break;
-        
-      case YAML_MAPPING_NODE:
-        for (pair = node->data.mapping.pairs.start; pair < node->data.mapping.pairs.top; pair++)
-          [objects[i] setObject: objects[pair->value - 1]
-                         forKey: objects[pair->key - 1]];
-        break;
-    }
+	  switch (node->type) {
+		  case YAML_SEQUENCE_NODE:
+			  for (item = node->data.sequence.items.start; item < node->data.sequence.items.top; item++)
+				  [objects[i] addObject: objects[*item - 1]];
+			  break;
+			  
+		  case YAML_MAPPING_NODE:
+			  for (pair = node->data.mapping.pairs.start; pair < node->data.mapping.pairs.top; pair++)
+				  [objects[i] setObject: objects[pair->value - 1]
+								 forKey: objects[pair->key - 1]];
+			  break;
+		  default:
+			  break;
+	  }
   }
 	
   // Retain the root object
@@ -254,7 +261,7 @@ static id YAMLSerializationWithDocument(yaml_document_t *document, YAMLReadOptio
     
     if (!done) {
       documentObject = YAMLSerializationWithDocument(&document, opt, error);
-      if (error) {
+      if (*error) {
 		  yaml_document_delete(&document);
       } else {
         [documents addObject: documentObject];
@@ -283,6 +290,11 @@ static id YAMLSerializationWithDocument(yaml_document_t *document, YAMLReadOptio
     return nil;
   }
 }
+
+// The static analyzer isn't a fan of this method because it returns void and
+// according to Apple standards a value should be returned when using NSError.
+// I won't change this now so I'm getting rid of the noise.
+#ifndef __clang_analyzer__
 
 + (void) writeYAML: (id) yaml
 		  toStream: (NSOutputStream *) stream
@@ -331,6 +343,8 @@ static id YAMLSerializationWithDocument(yaml_document_t *document, YAMLReadOptio
 	[stream close];
 	yaml_emitter_delete(&emitter);
 }
+
+#endif
 
 + (NSData *) dataFromYAML:(id)yaml options:(YAMLWriteOptions) opt error:(NSError **) error
 {
