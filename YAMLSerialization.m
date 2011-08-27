@@ -66,7 +66,8 @@ static int YAMLSerializationProcessValue(yaml_document_t *document, id value) {
 		if ( ![value isKindOfClass:[NSString class]] ) {
 			value = [value stringValue];
 		}
-		nodeId = yaml_document_add_scalar(document, NULL, (yaml_char_t*)[value UTF8String], [value length], YAML_PLAIN_SCALAR_STYLE);
+
+		nodeId = yaml_document_add_scalar(document, NULL, (yaml_char_t*)[value UTF8String], [value lengthOfBytesUsingEncoding:NSUTF8StringEncoding], YAML_PLAIN_SCALAR_STYLE);
 	}
 	return nodeId;
 }
