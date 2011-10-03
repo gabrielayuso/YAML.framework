@@ -864,7 +864,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = YAML;
-				SYMROOT = ../../build;
+				SYMROOT = ../../../../build;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -886,7 +886,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = YAML;
-				SYMROOT = ../../build;
+				SYMROOT = ../../../../build;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
@@ -902,6 +902,7 @@
 				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/yaml-0.1.3/include";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SYMROOT = ../../../../build;
 			};
 			name = Debug;
 		};
@@ -914,6 +915,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "${PROJECT_DIR}/yaml-0.1.3/include";
 				SDKROOT = macosx;
+				SYMROOT = ../../../../build;
 			};
 			name = Release;
 		};
