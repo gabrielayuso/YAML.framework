@@ -402,6 +402,7 @@ yaml_emitter_delete(yaml_emitter_t *emitter)
     }
     STACK_DEL(emitter, emitter->tag_directives);
     yaml_free(emitter->anchors);
+	yaml_free(emitter->document);
 
     memset(emitter, 0, sizeof(yaml_emitter_t));
 }

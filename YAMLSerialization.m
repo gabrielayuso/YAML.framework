@@ -379,7 +379,6 @@ static id YAMLSerializationWithDocument(yaml_document_t *document, YAMLReadOptio
 		yaml_document_t *document = YAMLSerializationToDocument(yaml, opt, error);
 		if (!document) {
 			yaml_emitter_delete(&emitter);
-
 			return nil;
 		}
 		
