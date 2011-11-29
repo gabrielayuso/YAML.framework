@@ -864,6 +864,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = YAML;
+				SDKROOT = macosx10.7;
 				SYMROOT = ../../../../build;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -886,6 +887,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = YAML;
+				SDKROOT = macosx10.7;
 				SYMROOT = ../../../../build;
 				WRAPPER_EXTENSION = framework;
 			};
