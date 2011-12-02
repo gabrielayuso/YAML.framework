@@ -193,6 +193,8 @@ yaml_emitter_delete_document_and_anchors(yaml_emitter_t *emitter)
 
     STACK_DEL(emitter, emitter->document->nodes);
     yaml_free(emitter->anchors);
+	yaml_document_delete(emitter->document);
+	yaml_free(emitter->document);
 
     emitter->anchors = NULL;
     emitter->last_anchor_id = 0;
